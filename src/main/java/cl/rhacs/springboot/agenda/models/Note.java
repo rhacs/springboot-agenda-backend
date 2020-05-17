@@ -14,34 +14,40 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "notes")
+@Table(name = "contact_notes")
 public class Note {
 
     // Attributes
     // -----------------------------------------------------------------------------------------
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Size(min = 5, max = 150)
-    @Column(name = "note", unique = true)
-    private String note;
+    @Size(min = 5, max = 250)
+    @Column(name = "content", unique = true)
+    private String content;
 
+    @JsonIgnore
     @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH }, fetch = FetchType.LAZY, targetEntity = Contact.class)
     @JoinColumn(name = "contact_id", nullable = false)
     private Contact contact;
 
+    @JsonIgnore
     @CreationTimestamp
     @Column(name = "created_at")
     private Date createdAt;
 
+    @JsonIgnore
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updatedAt;
@@ -57,13 +63,13 @@ public class Note {
     }
 
     /**
-     * Creates a new {@link Note} given a note and a {@link Contact}
+     * Creates a new {@link Note} given a content and a {@link Contact}
      *
-     * @param note    the note to set
+     * @param content the content to set
      * @param contact the contact to set
      */
-    public Note(final String note, final Contact contact) {
-        this.note = note;
+    public Note(final String content, final Contact contact) {
+        this.content = content;
         this.contact = contact;
     }
 
@@ -78,10 +84,10 @@ public class Note {
     }
 
     /**
-     * @return the note
+     * @return the content
      */
-    public String getNote() {
-        return note;
+    public String getContent() {
+        return content;
     }
 
     /**
@@ -109,10 +115,10 @@ public class Note {
     // -----------------------------------------------------------------------------------------
 
     /**
-     * @param note the note to set
+     * @param content the content to set
      */
-    public void setNote(final String note) {
-        this.note = note;
+    public void setContent(final String content) {
+        this.content = content;
     }
 
     /**
@@ -130,9 +136,8 @@ public class Note {
         final int prime = 31;
         int result = 1;
 
-        result = prime * result + ((contact == null) ? 0 : contact.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((note == null) ? 0 : note.hashCode());
+        result = prime * result + ((content == null) ? 0 : content.hashCode());
 
         return result;
     }
@@ -150,22 +155,16 @@ public class Note {
         if (getClass() != obj.getClass())
             return false;
 
-        if (contact == null) {
-            if (other.contact != null)
-                return false;
-        } else if (!contact.equals(other.contact))
-            return false;
-
         if (id == null) {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
             return false;
 
-        if (note == null) {
-            if (other.note != null)
+        if (content == null) {
+            if (other.content != null)
                 return false;
-        } else if (!note.equals(other.note))
+        } else if (!content.equals(other.content))
             return false;
 
         return true;
@@ -173,7 +172,8 @@ public class Note {
 
     @Override
     public String toString() {
-        return "Note [id=" + id + ", note=" + note + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
+        return "Note [id=" + id + ", content=" + content + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
+                + "]";
     }
 
 }
