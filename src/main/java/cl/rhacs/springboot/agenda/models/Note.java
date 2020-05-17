@@ -12,6 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,6 +35,9 @@ public class Note {
     @Column(name = "id")
     private Long id;
 
+    @NotNull
+    @NotBlank
+    @NotEmpty
     @Size(min = 5, max = 250)
     @Column(name = "content", unique = true)
     private String content;

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.rhacs.springboot.agenda.exceptions.ContactNotFoundException;
+import cl.rhacs.springboot.agenda.exceptions.InformationNotFoundException;
 import cl.rhacs.springboot.agenda.models.Contact;
 import cl.rhacs.springboot.agenda.models.Note;
 import cl.rhacs.springboot.agenda.models.PhoneNumber;
@@ -47,86 +49,101 @@ public class ContactController {
     }
 
     /**
-     * Retrieve the details for the specified {@link Contact}
+     * Retrieve the specified {@link Contact} detail
      *
-     * @param id the id to look for
-     * @return the contact detail, null if doesn't exists
+     * @param id the contact id
+     * @return the contact detail
+     * @throws ContactNotFoundException when the contact does not exists
      */
     @GetMapping(path = { "/{id:^\\d+$}" })
-    public ResponseEntity<Contact> getContact(@PathVariable Long id) {
-        Optional<Contact> contact = contactRepository.findById(id);
+    public ResponseEntity<Contact> getContact(@PathVariable final Long id) throws ContactNotFoundException {
+        final Optional<Contact> contact = contactRepository.findById(id);
 
-        if (contact.isPresent()) {
-            return new ResponseEntity<>(contact.get(), HttpStatus.OK);
+        if (!contact.isPresent()) {
+            throw new ContactNotFoundException(String.format("Contact with id %d not found", id));
         }
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(contact.get(), HttpStatus.OK);
     }
 
     /**
-     * Shows the list of {@link PhoneNumber}s owned by the contact
+     * Shows a list of {@link PhoneNumber}s of the specified {@link Contact}
      *
-     * @param id the id of the contact
-     * @return a list of phone numbers
+     * @param id the contact id
+     * @return the list of phone numbers
+     * @throws ContactNotFoundException     when the contact does not exists
+     * @throws InformationNotFoundException when the contact does not have phone
+     *                                      numbers
      */
     @GetMapping(path = { "/{id:^\\d+$}/phoneNumbers" })
-    public ResponseEntity<List<PhoneNumber>> getContactPhoneNumbers(@PathVariable Long id) {
-        Optional<Contact> contact = contactRepository.findById(id);
+    public ResponseEntity<List<PhoneNumber>> getContactPhoneNumbers(@PathVariable final Long id)
+            throws ContactNotFoundException, InformationNotFoundException {
+        final Optional<Contact> contact = contactRepository.findById(id);
 
         if (contact.isPresent()) {
-            Set<PhoneNumber> phoneNumbers = contact.get().getPhoneNumbers();
+            final Set<PhoneNumber> phoneNumbers = contact.get().getPhoneNumbers();
 
             if (!phoneNumbers.isEmpty())
                 return new ResponseEntity<>(new ArrayList<>(phoneNumbers), HttpStatus.OK);
 
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            throw new InformationNotFoundException(String.format("Contact with id %d does not have a phone number", id));
         }
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        throw new ContactNotFoundException(String.format("Contact with id %d not found", id));
     }
 
     /**
-     * Shows the list of {@link Tag}s assigned to a {@link Contact}
+     * Shows a list of {@link Tag}s assigned to the specified {@link Contact}
      *
-     * @param id the id of the contact
+     * @param id the contact id
      * @return a list of tags
+     * @throws ContactNotFoundException     when the contact does not exists
+     * @throws InformationNotFoundException when the contact does not have tags
+     *                                      assigned
      */
     @GetMapping(path = { "/{id:^\\d+$}/tags" })
-    public ResponseEntity<List<Tag>> getContactTags(@PathVariable Long id) {
-        Optional<Contact> contact = contactRepository.findById(id);
+    public ResponseEntity<List<Tag>> getContactTags(@PathVariable final Long id)
+            throws ContactNotFoundException, InformationNotFoundException {
+        final Optional<Contact> contact = contactRepository.findById(id);
 
         if (contact.isPresent()) {
-            Set<Tag> tags = contact.get().getTags();
+            final Set<Tag> tags = contact.get().getTags();
 
             if (!tags.isEmpty())
                 return new ResponseEntity<>(new ArrayList<>(tags), HttpStatus.OK);
 
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            throw new InformationNotFoundException(
+                    String.format("Contact with id %d does not have an assigned tag", id));
         }
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        throw new ContactNotFoundException(String.format("Contact with id %d not found", id));
     }
 
     /**
-     * Shows the list of {@link Note}s created for the {@link Contact}
+     * Shows a list of {@link Note}s for the specified {@link Contact}
      *
-     * @param id the id of the contact
+     * @param id the contact id
      * @return a list of notes
+     * @throws ContactNotFoundException     when the contact does not exists
+     * @throws InformationNotFoundException when the contact does not have notes
+     *                                      assigned
      */
     @GetMapping(path = { "/{id:^\\d+$}/notes" })
-    public ResponseEntity<List<Note>> getContactNotes(@PathVariable Long id) {
-        Optional<Contact> contact = contactRepository.findById(id);
+    public ResponseEntity<List<Note>> getContactNotes(@PathVariable final Long id)
+            throws ContactNotFoundException, InformationNotFoundException {
+        final Optional<Contact> contact = contactRepository.findById(id);
 
         if (contact.isPresent()) {
-            Set<Note> notes = contact.get().getNotes();
+            final Set<Note> notes = contact.get().getNotes();
 
             if (!notes.isEmpty())
                 return new ResponseEntity<>(new ArrayList<>(contact.get().getNotes()), HttpStatus.OK);
 
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            throw new InformationNotFoundException(
+                    String.format("Contact with id %d does not have an assigned note", id));
         }
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        throw new ContactNotFoundException(String.format("Contact with id %d not found", id));
     }
 
     // Post Mappings
@@ -139,8 +156,8 @@ public class ContactController {
      * @return the contact if everything is good
      */
     @PostMapping(path = { "", "/" })
-    public ResponseEntity<Contact> addContact(@RequestBody Contact contact) {
-        Contact savedContact = contactRepository.save(contact);
+    public ResponseEntity<Contact> addContact(@RequestBody final Contact contact) {
+        final Contact savedContact = contactRepository.save(contact);
         return new ResponseEntity<>(savedContact, HttpStatus.OK);
     }
 
@@ -148,47 +165,50 @@ public class ContactController {
     // -----------------------------------------------------------------------------------------
 
     /**
-     * Edit an existing {@link Contact}
+     * Edits an existing {@link Contact}
      *
-     * @param id      the id of the contact
-     * @param contact the new information to set
-     * @return the modified contact
+     * @param id      the contact id
+     * @param contact the contact information
+     * @return the updated contact
+     * @throws ContactNotFoundException when the contact does not exists
      */
     @PutMapping(path = "/{id:^\\d+$}")
-    public ResponseEntity<Contact> updateContact(@PathVariable Long id, @RequestBody Contact contact) {
-        Optional<Contact> foundContact = contactRepository.findById(id);
+    public ResponseEntity<Contact> updateContact(@PathVariable final Long id, @RequestBody final Contact contact)
+            throws ContactNotFoundException {
+        final Optional<Contact> foundContact = contactRepository.findById(id);
 
         if (foundContact.isPresent()) {
             if (contact.getId() != null && (foundContact.get().getId() == contact.getId())) {
-                Contact updatedContact = contactRepository.save(contact);
+                final Contact updatedContact = contactRepository.save(contact);
                 return new ResponseEntity<>(updatedContact, HttpStatus.OK);
             }
 
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        throw new ContactNotFoundException(String.format("Contact with id %d does not exists", id));
     }
 
     // Delete Mappings
     // -----------------------------------------------------------------------------------------
 
     /**
-     * Delete a {@link Contact}
+     * Deletes an existing {@link Contact}
      *
-     * @param id the contact's id
-     * @return OK status if deletion was succesfull, NOT_FOUND otherwise
+     * @param id the contact id
+     * @return HttpStatus OK
+     * @throws ContactNotFoundException when the contact does not exists
      */
     @DeleteMapping(path = "/{id:^\\d+$}")
-    public ResponseEntity<Contact> deleteContact(@PathVariable Long id) {
-        Optional<Contact> contact = contactRepository.findById(id);
+    public ResponseEntity<Contact> deleteContact(@PathVariable final Long id) throws ContactNotFoundException {
+        final Optional<Contact> contact = contactRepository.findById(id);
 
         if (contact.isPresent()) {
             contactRepository.delete(contact.get());
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        throw new ContactNotFoundException(String.format("Contact with id %d does not exists", id));
     }
 
 }
