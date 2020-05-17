@@ -92,8 +92,12 @@ public class TagController {
         Optional<Tag> foundTag = tagRepository.findById(id);
 
         if (foundTag.isPresent()) {
-            Tag updatedTag = tagRepository.save(tag);
-            return new ResponseEntity<>(updatedTag, HttpStatus.OK);
+            if(tag.getId() != null && (foundTag.get().getId() == tag.getId())) {
+                Tag updatedTag = tagRepository.save(tag);
+                return new ResponseEntity<>(updatedTag, HttpStatus.OK);
+            }
+
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

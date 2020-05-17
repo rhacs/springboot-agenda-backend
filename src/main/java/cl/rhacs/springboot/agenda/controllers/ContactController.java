@@ -159,8 +159,12 @@ public class ContactController {
         Optional<Contact> foundContact = contactRepository.findById(id);
 
         if (foundContact.isPresent()) {
-            Contact updatedContact = contactRepository.save(contact);
-            return new ResponseEntity<>(updatedContact, HttpStatus.OK);
+            if (contact.getId() != null && (foundContact.get().getId() == contact.getId())) {
+                Contact updatedContact = contactRepository.save(contact);
+                return new ResponseEntity<>(updatedContact, HttpStatus.OK);
+            }
+
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
