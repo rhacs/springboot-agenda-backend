@@ -16,6 +16,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,6 +36,9 @@ public class Contact {
     @Column(name = "id")
     private Long id;
 
+    @NotNull
+    @NotBlank
+    @NotEmpty
     @Size(min = 2, max = 50)
     @Column(name = "first_name")
     private String firstName;
