@@ -12,6 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,6 +35,9 @@ public class Tag {
     @Column(name = "id")
     private Long id;
 
+    @NotNull
+    @NotBlank
+    @NotEmpty
     @Size(min = 4, max = 25)
     @Column(name = "name", unique = true)
     private String name;
