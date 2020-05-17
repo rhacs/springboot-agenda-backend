@@ -20,7 +20,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "contact_notes")
+@Table(name = "notes")
 public class Note {
 
     // Attributes

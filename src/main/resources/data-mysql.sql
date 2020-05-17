@@ -48,21 +48,21 @@ insert into contacts (first_name, last_name, email, created_at, updated_at) valu
 insert into contacts (first_name, last_name, email, created_at, updated_at) values ('Norbie', 'Syms', 'nsymso@google.ru', now(), now());
 
 --
--- Table: contact_notes
+-- Table: notes
 --
 
-insert into contact_notes (content, contact_id, updated_at, created_at) values ('Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.', 7, now(), now());
-insert into contact_notes (content, contact_id, updated_at, created_at) values ('Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus.', 13, now(), now());
-insert into contact_notes (content, contact_id, updated_at, created_at) values ('Sed ante. Vivamus tortor.', 8, now(), now());
-insert into contact_notes (content, contact_id, updated_at, created_at) values ('Aenean sit amet justo. Morbi ut odio.', 19, now(), now());
-insert into contact_notes (content, contact_id, updated_at, created_at) values ('In est risus, auctor sed, tristique in, tempus sit amet, sem. Fusce consequat.', 24, now(), now());
-insert into contact_notes (content, contact_id, updated_at, created_at) values ('Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices.', 23, now(), now());
-insert into contact_notes (content, contact_id, updated_at, created_at) values ('Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat. Curabitur gravida nisi at nibh.', 12, now(), now());
-insert into contact_notes (content, contact_id, updated_at, created_at) values ('Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus.', 16, now(), now());
-insert into contact_notes (content, contact_id, updated_at, created_at) values ('Integer a nibh. In quis justo. Maecenas rhoncus aliquam lacus.', 4, now(), now());
-insert into contact_notes (content, contact_id, updated_at, created_at) values ('Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo.', 11, now(), now());
-insert into contact_notes (content, contact_id, updated_at, created_at) values ('Proin at turpis a pede posuere nonummy. Integer non velit.', 14, now(), now());
-insert into contact_notes (content, contact_id, updated_at, created_at) values ('Duis at velit eu est congue elementum. In hac habitasse platea dictumst.', 1, now(), now());
+insert into notes (content, contact_id, updated_at, created_at) values ('Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.', 7, now(), now());
+insert into notes (content, contact_id, updated_at, created_at) values ('Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus.', 13, now(), now());
+insert into notes (content, contact_id, updated_at, created_at) values ('Sed ante. Vivamus tortor.', 8, now(), now());
+insert into notes (content, contact_id, updated_at, created_at) values ('Aenean sit amet justo. Morbi ut odio.', 19, now(), now());
+insert into notes (content, contact_id, updated_at, created_at) values ('In est risus, auctor sed, tristique in, tempus sit amet, sem. Fusce consequat.', 24, now(), now());
+insert into notes (content, contact_id, updated_at, created_at) values ('Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices.', 23, now(), now());
+insert into notes (content, contact_id, updated_at, created_at) values ('Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat. Curabitur gravida nisi at nibh.', 12, now(), now());
+insert into notes (content, contact_id, updated_at, created_at) values ('Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus.', 16, now(), now());
+insert into notes (content, contact_id, updated_at, created_at) values ('Integer a nibh. In quis justo. Maecenas rhoncus aliquam lacus.', 4, now(), now());
+insert into notes (content, contact_id, updated_at, created_at) values ('Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo.', 11, now(), now());
+insert into notes (content, contact_id, updated_at, created_at) values ('Proin at turpis a pede posuere nonummy. Integer non velit.', 14, now(), now());
+insert into notes (content, contact_id, updated_at, created_at) values ('Duis at velit eu est congue elementum. In hac habitasse platea dictumst.', 1, now(), now());
 
 --
 -- Table: phone_numbers
