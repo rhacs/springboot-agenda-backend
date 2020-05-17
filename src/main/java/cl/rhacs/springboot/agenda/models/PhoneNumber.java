@@ -1,5 +1,7 @@
 package cl.rhacs.springboot.agenda.models;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 @Table(name = "phone_numbers")
 public class PhoneNumber {
@@ -18,6 +25,7 @@ public class PhoneNumber {
     // Attributes
     // -----------------------------------------------------------------------------------------
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -32,10 +40,21 @@ public class PhoneNumber {
     @Column(name = "number", unique = true)
     private Long number;
 
+    @JsonIgnore
     @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH }, fetch = FetchType.LAZY, targetEntity = Contact.class)
     @JoinColumn(name = "contact_id", nullable = false)
     private Contact contact;
+
+    @JsonIgnore
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    @JsonIgnore
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     // Constructors
     // -----------------------------------------------------------------------------------------

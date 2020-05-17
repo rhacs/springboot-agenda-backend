@@ -14,6 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -24,6 +26,7 @@ public class Tag {
     // Attributes
     // -----------------------------------------------------------------------------------------
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -33,14 +36,17 @@ public class Tag {
     @Column(name = "name", unique = true)
     private String name;
 
+    @JsonIgnore
     @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH }, fetch = FetchType.LAZY, mappedBy = "tags", targetEntity = Contact.class)
+            CascadeType.REFRESH }, fetch = FetchType.LAZY, targetEntity = Contact.class)
     private Set<Contact> contacts;
 
+    @JsonIgnore
     @CreationTimestamp
     @Column(name = "created_at")
     private Date createdAt;
 
+    @JsonIgnore
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updatedAt;
