@@ -1,4 +1,4 @@
-# SpringBoot-Agenda-Backend
+# :tada: SpringBoot-Agenda-Backend
 Just a small backend project for a Contact Book.
 
 # Model
